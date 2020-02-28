@@ -11,19 +11,31 @@ ENV FILESENDER_VERSION=2.15 \
     SSP_SUM="7530dec7290ba5efaac08cb17042819a96dc530e217c3810cdde9be76d57b2ca" 
 
 RUN cd /opt && mkdir filesender && \
+    cd /opt/filesender && \
     curl -kL https://github.com/filesender/filesender/archive/master-filesender-${FILESENDER_VERSION}.tar.gz | tar xz && \
     ln -s filesender-master-filesender-${FILESENDER_VERSION} filesender && \
     curl -L https://github.com/simplesamlphp/simplesamlphp/releases/download/v${SSP_VERSION}/simplesamlphp-${SSP_VERSION}.tar.gz | tar xz && \
     ln -s simplesamlphp-${SSP_VERSION} simplesamlphp
+
+RUN cd /opt/filesender/filesender && \
+    cp config/config_sample.php config/config.php && \
+    mkdir -p tmp files log && \
+    chmod o-rwx tmp files log config/config.php && \
+    chown www-data:www-data tmp files log && \
+    chgrp www-data config/config.php && \
+    cd /opt/filesender/simplesamlphp && \
+    cp -r config-templates/*.php config/ && \
+    cp -r metadata-templates/*.php metadata/
 
 RUN apt-get update && \
     apt-get dist-upgrade -y && \
     apt-get autoremove -y && \
     apt-get clean && \ 
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN chown -R www-data:www-data /opt/filesender/*
-
+    
 VOLUME ["/opt/filesender"]
 
-CMD ["/entrypoint.sh"]
+# We keep entrypoint, expose and cmd as they were in base image, they are listed below for completeness
+# ENTRYPOINT ["docker-php-entrypoint"]
+# EXPOSE 9000
+# CMD ["php-fpm"]
