@@ -1,5 +1,5 @@
 FROM php:7.4-fpm-buster
-LABEL version="0.1" \
+LABEL version="0.2" \
       license="GPL2" \
       maintainer="Nils Vogels <n.vogels@aves-it.nl>" \
       description="Filesender and simplesamlphp based on php7-fpm" \
@@ -27,6 +27,14 @@ RUN cd /opt/filesender/filesender && \
     cp -r config-templates/*.php config/ && \
     cp -r metadata-templates/*.php metadata/
 
+RUN mkdir -p /config/fpm /config/filesender /config/simplesamlphp/config && \
+    ln -s /usr/local/etc/php-fpm.d/filesender.conf /config/fpm/www.conf && \
+    ln -s /opt/filesender/filesender/config/config.php /config/filesender/config.php && \
+    ln -s /opt/filesender/simplesamlphp/config/acl.php /config/simplesamlphp/config/acl.php && \
+    ln -s /opt/filesender/simplesamlphp/config/authsource.php /config/simplesamlphp/config/authsource.php && \
+    ln -s /opt/filesender/simplesamlphp/config/config.php /config/simplesamlphp/config/config.php && \
+    ln -s /opt/filesender/simplesamlphp/metadata/active.php /config/simplesamlphp/active.php
+ 
 RUN apt-get update && \
     apt-get dist-upgrade -y && \
     apt-get autoremove -y && \
