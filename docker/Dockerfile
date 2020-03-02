@@ -28,12 +28,12 @@ RUN cd /opt/filesender/filesender && \
     cp -r metadata-templates/*.php metadata/
 
 RUN mkdir -p /config/fpm /config/filesender /config/simplesamlphp/config && \
-    ln -s /usr/local/etc/php-fpm.d/filesender.conf /config/fpm/www.conf && \
-    ln -s /opt/filesender/filesender/config/config.php /config/filesender/config.php && \
-    ln -s /opt/filesender/simplesamlphp/config/acl.php /config/simplesamlphp/config/acl.php && \
-    ln -s /opt/filesender/simplesamlphp/config/authsource.php /config/simplesamlphp/config/authsource.php && \
-    ln -s /opt/filesender/simplesamlphp/config/config.php /config/simplesamlphp/config/config.php && \
-    ln -s /opt/filesender/simplesamlphp/metadata/active.php /config/simplesamlphp/active.php
+    ln -s /config/fpm/www.conf /usr/locl/etc/php-fpm.d/filesender.conf && \
+    ln -s /config/filesender/config.php /opt/filesender/filesender/config/config.php && \
+    ln -s /config/simplesamlphp/config/acl.php /opt/filesender/simplesamlphp/config/acl.php && \
+    ln -s /config/simplesamlphp/config/authsource.php /opt/filesender/simplesamlphp/config/authsource.php && \
+    ln -s /config/simplesamlphp/config/config.php /opt/filesender/simplesamlphp/config/config.php && \
+    ln -s /config/simplesamlphp/active.php /opt/filesender/simplesamlphp/metadata/active.php 
  
 RUN apt-get update && \
     apt-get dist-upgrade -y && \
