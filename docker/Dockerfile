@@ -27,13 +27,19 @@ RUN cd /opt/filesender/filesender && \
     cp -r config-templates/*.php config/ && \
     cp -r metadata-templates/*.php metadata/
 
-RUN mkdir -p /config/fpm /config/filesender /config/simplesamlphp/config && \
-    ln -s /config/fpm/www.conf /usr/locl/etc/php-fpm.d/filesender.conf && \
+RUN mkdir -p /config/fpm /config/filesender /config/simplesamlphp/config /config/simplesamlphp/metadata && \
+    rm -f /usr/local/etc/php-fpm.d/filesender.conf && \
+    rm -f /opt/filesender/filesender/config/config.php && \
+    rm -f /opt/filesender/simplesamlphp/config/config.php && \
+    rm -f /opt/filesender/simplesamlphp/config/acl.php && \
+    rm -f /opt/filesender/simplesamlphp/config/authsource.php && \
+    rm -f /opt/filesender/simplesamlphp/metadata/active.php && \
+    ln -s /config/fpm/www.conf /usr/local/etc/php-fpm.d/filesender.conf && \
     ln -s /config/filesender/config.php /opt/filesender/filesender/config/config.php && \
     ln -s /config/simplesamlphp/config/acl.php /opt/filesender/simplesamlphp/config/acl.php && \
     ln -s /config/simplesamlphp/config/authsource.php /opt/filesender/simplesamlphp/config/authsource.php && \
     ln -s /config/simplesamlphp/config/config.php /opt/filesender/simplesamlphp/config/config.php && \
-    ln -s /config/simplesamlphp/active.php /opt/filesender/simplesamlphp/metadata/active.php 
+    ln -s /config/simplesamlphp/metadata/active.php /opt/filesender/simplesamlphp/metadata/active.php
  
 RUN apt-get update && \
     apt-get dist-upgrade -y && \
@@ -42,6 +48,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
 VOLUME ["/opt/filesender"]
+VOLUME ["/config/fpm"]
+VOLUME ["/config/filesender/config"]
+VOLUME ["/config/simplesamlphp/config"]
+VOLUME ["/config/simplesamlphp/metadata"]
 
 # We keep entrypoint, expose and cmd as they were in base image, they are listed below for completeness
 # ENTRYPOINT ["docker-php-entrypoint"]
