@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: filesender
+    tier: backend
+  name: filesender
+  namespace: filesender
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: filesender
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: filesender
+        tier: backend
+    spec:
+      containers:
+      - image: registry.cloud.aves-it.nl/filesender:latest
+        name: filesender
+        ports:
+          - fpm: 9000
+        resources: 
+          requests: 
+            memory: "200Mi"
+            cpu: "200m"
+        volumeMounts:
+          - name: app-data
+            mountPath: /opt/filesender
+          - name: php-config
+            mountPath: /config/fpm
+          - name: filesender-config
+            mountPath: /config/filesender
+          - name: simplesamlphp-config
+            mountPath: /config/simplesamlphp/config
+          - name: simplesamlphp-meta
+            mountPath: /config/simplesamlphp/metadata
+          - name: filesender-data
+            mountPath: /opt/filesender/data
+      volumes:
+        - name: app-data
+          persistentVolumeClaim:
+            claimName: filesender-app
+        - name: php-config
+          ConfigMap:
+            name: php-config
+        - name: filesender-config
+          ConfigMap:
+            name: filesender-config
+        - name: simplesamlphp-config
+          ConfigMap:
+            name: simplesamlphp-config
+        - name: simplesamlphp-meta
+          ConfigMap:
+            name: simplesamlphp-meta
+        - name: filesender-data
+          persistentVolumeClaim:
+            claimName: filesender-data

@@ -1,1 +1,1 @@
-YAML files for filesender deployment
+Example YAML files for filesender deployment
