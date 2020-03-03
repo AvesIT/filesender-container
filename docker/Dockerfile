@@ -1,5 +1,5 @@
 FROM php:7.4-fpm-buster
-LABEL version="0.2" \
+LABEL version="0.3" \
       license="GPL2" \
       maintainer="Nils Vogels <n.vogels@aves-it.nl>" \
       description="Filesender and simplesamlphp based on php7-fpm" \
@@ -47,11 +47,7 @@ RUN apt-get update && \
     apt-get clean && \ 
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
-VOLUME ["/opt/filesender"]
-VOLUME ["/config/fpm"]
-VOLUME ["/config/filesender/config"]
-VOLUME ["/config/simplesamlphp/config"]
-VOLUME ["/config/simplesamlphp/metadata"]
+VOLUME ["/opt/filesender", "/config/fpm", "/config/filesender/config", "/config/simplesamlphp/config", "/config/simplesamlphp/metadata"]
 
 # We keep entrypoint, expose and cmd as they were in base image, they are listed below for completeness
 # ENTRYPOINT ["docker-php-entrypoint"]
