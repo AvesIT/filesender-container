@@ -47,7 +47,7 @@ RUN apt-get update && \
     apt-get clean && \ 
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
-VOLUME ["/opt/filesender", "/config/fpm", "/config/filesender/config", "/config/simplesamlphp/config", "/config/simplesamlphp/metadata"]
+VOLUME ["/opt/filesender", "/config/fpm", "/config/filesender", "/config/simplesamlphp/config", "/config/simplesamlphp/metadata", "/opt/filesender/data"]
 
 # We keep entrypoint, expose and cmd as they were in base image, they are listed below for completeness
 # ENTRYPOINT ["docker-php-entrypoint"]
