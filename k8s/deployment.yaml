@@ -22,7 +22,8 @@ spec:
       - image: registry.cloud.aves-it.nl/filesender:latest
         name: filesender
         ports:
-          - fpm: 9000
+          - name: fpm
+            containerPort: 9000
         resources: 
           requests: 
             memory: "200Mi"
