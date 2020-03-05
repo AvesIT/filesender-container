@@ -47,6 +47,10 @@ RUN apt-get update && \
     apt-get autoremove -y && \
     apt-get clean && \ 
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY assets/nginx.conf /etc/nginx/nginx.conf
+COPY assets/fastcgi_params /etc/nginx/fastcgi_params
+COPY assets/vhost.conf /etc/nginx/sites-enabled/vhost.conf
     
 VOLUME ["/opt/filesender", "/config/fpm", "/config/filesender", "/config/simplesamlphp/config", "/config/simplesamlphp/metadata", "/opt/filesender/data"]
 
