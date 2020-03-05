@@ -43,7 +43,7 @@ RUN mkdir -p /config/fpm /config/filesender /config/simplesamlphp/config /config
  
 RUN apt-get update && \
     apt-get dist-upgrade -y && \
-    apt-get install nginx && \
+    apt-get install -y --no-install-recommends nginx && \
     apt-get autoremove -y && \
     apt-get clean && \ 
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
