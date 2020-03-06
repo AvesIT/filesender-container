@@ -28,12 +28,10 @@ RUN cd /opt/filesender/filesender && \
     cp -r metadata-templates/*.php metadata/
 
 RUN mkdir -p /config/fpm /config/filesender /config/simplesamlphp/config /config/simplesamlphp/metadata && \
-    rm -f /usr/local/etc/php-fpm.d/filesender.conf && \
-    rm -f /opt/filesender/filesender/config/config.php && \
-    rm -f /opt/filesender/simplesamlphp/config/config.php && \
-    rm -f /opt/filesender/simplesamlphp/config/acl.php && \
-    rm -f /opt/filesender/simplesamlphp/config/authsource.php && \
-    rm -f /opt/filesender/simplesamlphp/metadata/active.php && \
+    mv -f /usr/local/etc/php-fpm.d/www.conf /config/fpm/www.conf && \
+    mv -f /opt/filesender/filesender/config/config.php /config/filesender/config.php && \
+    mv -f /opt/filesender/simplesamlphp/config/*.php /config/simplesamlphp/config/ && \
+    mv -f /opt/filesender/simplesamlphp/metadata/*.php /config/simplesamlphp/metadata/ && \
     ln -s /config/fpm/www.conf /usr/local/etc/php-fpm.d/filesender.conf && \
     ln -s /config/filesender/config.php /opt/filesender/filesender/config/config.php && \
     ln -s /config/simplesamlphp/config/acl.php /opt/filesender/simplesamlphp/config/acl.php && \
@@ -43,18 +41,14 @@ RUN mkdir -p /config/fpm /config/filesender /config/simplesamlphp/config /config
  
 RUN apt-get update && \
     apt-get dist-upgrade -y && \
-    apt-get install -y --no-install-recommends nginx && \
+    apt-get install -y --no-install-recommends nginx runit && \
     apt-get autoremove -y && \
     apt-get clean && \ 
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY assets/nginx.conf /etc/nginx/nginx.conf
-COPY assets/fastcgi_params /etc/nginx/fastcgi_params
-COPY assets/vhost.conf /etc/nginx/sites-enabled/vhost.conf
+COPY assets /
     
 VOLUME ["/opt/filesender", "/config/fpm", "/config/filesender", "/config/simplesamlphp/config", "/config/simplesamlphp/metadata", "/opt/filesender/data"]
+EXPOSE 80 443
 
-# We keep entrypoint, expose and cmd as they were in base image, they are listed below for completeness
-# ENTRYPOINT ["docker-php-entrypoint"]
-# EXPOSE 9000
-# CMD ["php-fpm"]
+CMD ["/usr/local/sbin/runsvdir-init"]
