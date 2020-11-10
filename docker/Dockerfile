@@ -5,9 +5,9 @@ LABEL version="0.3" \
       description="Filesender and simplesamlphp based on php7-fpm" \
       documentation="Currently lacking" 
 
-ENV FILESENDER_VERSION=2.15 \
+ENV FILESENDER_VERSION=2.20 \
     FILESENDER_SUM="111a630d778a5670ded8fc6d4bddff021375beaf160d1204e928937c0182444c" \
-    SSP_VERSION=1.18.4 \
+    SSP_VERSION=1.18.8 \
     SSP_SUM="7530dec7290ba5efaac08cb17042819a96dc530e217c3810cdde9be76d57b2ca" 
 
 RUN cd /opt && mkdir filesender && \
