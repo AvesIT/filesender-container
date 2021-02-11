@@ -37,42 +37,4 @@ The following environment variables control the container setup:
 
 ## Configuration
 
-The following table lists the configurable parameters of the container and their default values.
-
-|           Environment             |              Description                 |                          Default                        | 
-| --------------------------------- | ---------------------------------------- | ------------------------------------------------------- |
-| `FILESENDER_URL`                  | full URL to filesender service           | `https://localhost/`                                    |
-| `FILESENDER_AUTHTYPE`             | Authentication for filesender, possible  |                                                         |
-|                                   | values: shibboleth / saml / fake         | `saml`                                                  |
-| `FILESENDER_AUTHSAML`             | Authentication type for simplesaml       |                                                         |
-| `MAIL_ATTR`                       | Attributes. Value varies per AUTHTYPE    |                                                         |
-| `NAME_ATTR`                       | simplesaml: SAML attribute               |                                                         |
-| `UID_ATTR`                        | shibboleth: ENV variable name            |                                                         |
-|                                   | fake: actual value                       |                                                         |
-| `FILESENDER_STORAGE`              | Filesystem: Local fs storage             | `Filesystem`                                            |
-|                                   | FilesystemChunked: File chunks locally   |                                                         |
-|                                   | FilesystemPreserveName: Original filename|                                                         |
-|                                   | on local fs                              |                                                         |
-|                                   | FilesystemAzure: Azure blob *alpha*      |                                                         |
-|                                   | FilesystemS3: AWS S3 storage *alpha*     |                                                         |
-| `DB_TYPE`                         | Database type. Supports mysql or pgsql   | `pgsql`                                                 |
-| `DB_HOST`                         | Database hostname to connect to          |                                                         |
-| `DB_NAME`                         | Database name to use                     | `filesender`                                            |
-| `DB_PORT`                         | Database port to connect to              | `3306 for mysql, 5432 for pgsql`                        |
-| `DB_USER`                         | Database user to connect to the database | `filesender`                                            |
-| `DB_PASSWORD`                     | Password for DB_USER                     |                                                         |
-| `PHP_FPM_LISTEN`                  | Port for PHP FPM to listen to            | `9000`                                                  |
-| `SMTP_SERVER`                     | SMTP server to send e-mail through       |                                                         |
-| `SMTP_TLS`                        | SMTP server uses encrypted communication | `True`                                                  |
-| `SMTP_USER`                       | optional user account for SMTP           |                                                         |
-| `SMTP_PASSWORD`                   | optional password for SMTP               |                                                         |
-| `CHOWN_WWW`                       | optional uid:gid value to run as         |                                                         |
-| `ADMIN_EMAIL`                     | e-mail address for filesender admin      |                                                         |
-| `ADMIN_USERS`                     | set of user identifiers that are admin   |                                                         |
-| `ADMIN_PASSWORD`                  | Admin account password                   |                                                         |
-| `SIMPLESAML_MODULES`              | Space seperated list of enabled modules  |                                                         |
-| `SIMPLESAML_SALT`                 | optional simplesaml salt                 | auto-generated on first run if missing                  |
-
-These variables are set using the [setup.sh](https://github.com/AvesIT/filesender-phpfpm/blob/master/docker/setup.sh) script, which runs in the filesender-phpfpm docker container the first time it starts up from the location /setup.sh.
-
-
+The container has it's configuration for Filesender, fpm and SimpleSAMLphp in /config. Here you can adjust the default config files, or place your own
