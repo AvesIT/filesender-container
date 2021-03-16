@@ -1,9 +1,4 @@
 FROM php:7.4-fpm-buster
-LABEL version="0.3" \
-      license="GPL2" \
-      maintainer="Nils Vogels <n.vogels@aves-it.nl>" \
-      description="Filesender and simplesamlphp based on php7-fpm" \
-      documentation="Currently lacking" 
 
 ENV FILESENDER_VERSION=2.22 \
     FILESENDER_SUM="ef6da83e7ac46303e5f8d620f6858565fd746d7c4b054a12439a561d79b515a2" \
@@ -52,3 +47,18 @@ VOLUME ["/opt/filesender", "/config/fpm", "/config/filesender", "/config/simples
 EXPOSE 80 443
 
 CMD ["/usr/local/sbin/runsvdir-init"]
+
+ARG BUILD_DATE
+ARG VCS_REF
+LABEL maintainer="Nils Vogels <n.vogels@aves-it.nl>" \
+      org.label-schema.build-date="${BUILD_DATE}" \
+      org.label-schema.docker.dockerfile="/docker/Dockerfile" \
+      org.label-schema.license="BSD3" \
+      org.label-schema.name="Filesender and SimpleSamlPHP on php7-fpm" \
+      org.label-schema.vendor="Aves IT" \
+      org.label-schema.url="https://filesender.org" \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/filesender/filesender.git" \
+      org.label-schema.vcs-type="Git" \
+      org.label-schema.version="2.22" \
+      org.label-schema.schema-version="1.0"
