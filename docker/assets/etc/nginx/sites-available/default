@@ -21,8 +21,8 @@ server {
             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         }
         location ^~ /simplesamlphp {
-            alias /opt/filesender/simplesamlphp/saml/www;
-            location ~ ^(?<prefix>/saml)(?<phpfile>.+?\.php)(?<pathinfo>/.*)?$ {
+            alias /opt/filesender/simplesamlphp/www;
+            location ~ ^(?<prefix>/simplesamlphp)(?<phpfile>.+?\.php)(?<pathinfo>/.*)?$ {
                 include fastcgi_params;
                 fastcgi_pass  localhost:9000;
                 fastcgi_param SCRIPT_FILENAME $document_root$phpfile;
