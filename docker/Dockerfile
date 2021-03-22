@@ -3,7 +3,12 @@ FROM php:7.4-fpm-buster
 ENV FILESENDER_VERSION=2.22 \
     FILESENDER_SUM="ef6da83e7ac46303e5f8d620f6858565fd746d7c4b054a12439a561d79b515a2" \
     SSP_VERSION=1.19.0 \
-    SSP_SUM="2111129787a4baf27a51e52bda660c56d069f167354800bffc72440dcacb3a6f" 
+    SSP_SUM="2111129787a4baf27a51e52bda660c56d069f167354800bffc72440dcacb3a6f" \
+    PHP_EXTENSIONS="1.2.3"
+
+# Install needed extensions
+COPY --from=mlocati/php-extension-installer:${PHP_EXTENSIONS} /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions pdo_mysql pdo_pgsql
 
 RUN cd /opt && mkdir filesender && \
     cd /opt/filesender && \
@@ -24,11 +29,11 @@ RUN cd /opt/filesender/filesender && \
 
 RUN mkdir -p /config/fpm /config/filesender /config/simplesamlphp/config /config/simplesamlphp/metadata && \
     mv -f /usr/local/etc/php-fpm.d/www.conf /config/fpm/www.conf && \
-    mv -f /opt/filesender/filesender/config/config.php /config/filesender/config.php && \
+    mv -f /opt/filesender/filesender/config /config/filesender && \
     mv -f /opt/filesender/simplesamlphp/config/*.php /config/simplesamlphp/config/ && \
     mv -f /opt/filesender/simplesamlphp/metadata/*.php /config/simplesamlphp/metadata/ && \
     ln -s /config/fpm/www.conf /usr/local/etc/php-fpm.d/filesender.conf && \
-    ln -s /config/filesender/config.php /opt/filesender/filesender/config/config.php && \
+    ln -s /config/filesender/config /opt/filesender/filesender/config && \
     ln -s /config/simplesamlphp/config/acl.php /opt/filesender/simplesamlphp/config/acl.php && \
     ln -s /config/simplesamlphp/config/authsource.php /opt/filesender/simplesamlphp/config/authsource.php && \
     ln -s /config/simplesamlphp/config/config.php /opt/filesender/simplesamlphp/config/config.php && \
