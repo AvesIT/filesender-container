@@ -16,6 +16,7 @@ RUN cd /opt && mkdir filesender && \
     curl -L https://github.com/simplesamlphp/simplesamlphp/releases/download/v${SSP_VERSION}/simplesamlphp-${SSP_VERSION}.tar.gz | tar xz && \
     ln -s simplesamlphp-${SSP_VERSION} simplesamlphp
 
+# Run basic install steps from application manual
 RUN cd /opt/filesender/filesender && \
     cp config/config_sample.php config/config.php && \
     mkdir -p tmp files log && \
@@ -26,9 +27,11 @@ RUN cd /opt/filesender/filesender && \
     cp -r config-templates/*.php config/ && \
     cp -r metadata-templates/*.php metadata/
 
-RUN mkdir -p /config/fpm /config/filesender /config/simplesamlphp/config /config/simplesamlphp/metadata && \
+# Specialise: Configs are in /config, Data is in /data
+RUN mkdir -p /config/fpm /config/filesender /config/simplesamlphp/config /config/simplesamlphp/metadata /data && \
     mv -f /usr/local/etc/php-fpm.d/www.conf /config/fpm/www.conf && \
     mv -f /opt/filesender/filesender/config /config/filesender && \
+    rm -Rf /opt/filesender/filesender/files /opt/filesender/filesender/tmp /opt/filesender/filesender/log && \
     mv -f /opt/filesender/simplesamlphp/config/*.php /config/simplesamlphp/config/ && \
     mv -f /opt/filesender/simplesamlphp/metadata/*.php /config/simplesamlphp/metadata/ && \
     ln -s /config/fpm/www.conf /usr/local/etc/php-fpm.d/filesender.conf && \
@@ -36,6 +39,9 @@ RUN mkdir -p /config/fpm /config/filesender /config/simplesamlphp/config /config
     ln -s /config/simplesamlphp/config/acl.php /opt/filesender/simplesamlphp/config/acl.php && \
     ln -s /config/simplesamlphp/config/authsource.php /opt/filesender/simplesamlphp/config/authsource.php && \
     ln -s /config/simplesamlphp/config/config.php /opt/filesender/simplesamlphp/config/config.php && \
+    ln -s /data/files /opt/filesender/filesender/files && \
+    ln -s /data/tmp /opt/filesender/filesender/tmp && \
+    ln -s /data/log /opt/filesender/filesender/log && \
     ln -s /config/simplesamlphp/metadata/active.php /opt/filesender/simplesamlphp/metadata/active.php
  
 RUN apt-get update && \
@@ -47,7 +53,10 @@ RUN apt-get update && \
 
 COPY assets /
     
-VOLUME ["/opt/filesender", "/config/fpm", "/config/filesender", "/config/simplesamlphp/config", "/config/simplesamlphp/metadata", "/opt/filesender/data"]
+VOLUME ["/opt/filesender"]
+VOLUME ["/config/fpm", "/config/filesender", "/config/simplesamlphp/config", "/config/simplesamlphp/metadata"]
+VOLUME ["/data/files", "/data/tmp", "/data/log"]
+
 EXPOSE 80 443
 
 CMD ["/usr/local/sbin/runsvdir-init"]
