@@ -57,7 +57,7 @@ VOLUME ["/opt/filesender"]
 VOLUME ["/config/fpm", "/config/filesender", "/config/simplesamlphp/config", "/config/simplesamlphp/metadata"]
 VOLUME ["/data/files", "/data/tmp", "/data/log"]
 
-EXPOSE 80 443
+EXPOSE 80 443 9000
 
 CMD ["/usr/local/sbin/runsvdir-init"]
 
