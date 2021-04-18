@@ -1,6 +1,6 @@
 FROM php:7.4-fpm-buster
 
-ENV FILESENDER_VERSION=2.22 \
+ENV FILESENDER_VERSION=2.24 \
     FILESENDER_SUM="ef6da83e7ac46303e5f8d620f6858565fd746d7c4b054a12439a561d79b515a2" \
     SSP_VERSION=1.19.0 \
     SSP_SUM="2111129787a4baf27a51e52bda660c56d069f167354800bffc72440dcacb3a6f"
@@ -9,12 +9,14 @@ ENV FILESENDER_VERSION=2.22 \
 COPY --from=mlocati/php-extension-installer:1.2.23 /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions pdo_mysql pdo_pgsql
 
+# Get software in
 RUN cd /opt && mkdir filesender && \
     cd /opt/filesender && \
     curl -kL https://github.com/filesender/filesender/archive/master-filesender-${FILESENDER_VERSION}.tar.gz | tar xz && \
     ln -s filesender-master-filesender-${FILESENDER_VERSION} filesender && \
     curl -L https://github.com/simplesamlphp/simplesamlphp/releases/download/v${SSP_VERSION}/simplesamlphp-${SSP_VERSION}.tar.gz | tar xz && \
-    ln -s simplesamlphp-${SSP_VERSION} simplesamlphp
+    ln -s simplesamlphp-${SSP_VERSION} simplesamlphp && \
+    rm -f filesender-master-filesender-${FILESENDER_VERSION}.tar.gz simplesamlphp-${SSP_VERSION}.tar.gz
 
 # Run basic install steps from application manual
 RUN cd /opt/filesender/filesender && \
@@ -37,16 +39,18 @@ RUN mkdir -p /config/fpm /config/filesender /config/simplesamlphp/config /config
     ln -s /config/fpm/www.conf /usr/local/etc/php-fpm.d/filesender.conf && \
     ln -s /config/filesender/config /opt/filesender/filesender/config && \
     ln -s /config/simplesamlphp/config/acl.php /opt/filesender/simplesamlphp/config/acl.php && \
-    ln -s /config/simplesamlphp/config/authsource.php /opt/filesender/simplesamlphp/config/authsource.php && \
+    ln -s /config/simplesamlphp/config/authsources.php /opt/filesender/simplesamlphp/config/authsources.php && \
     ln -s /config/simplesamlphp/config/config.php /opt/filesender/simplesamlphp/config/config.php && \
+    mkdir /data/files /data/tmp /data/log && \
     ln -s /data/files /opt/filesender/filesender/files && \
     ln -s /data/tmp /opt/filesender/filesender/tmp && \
     ln -s /data/log /opt/filesender/filesender/log && \
+    chown -R www-data:www-data /data/tmp /data/log /data/files && \
     ln -s /config/simplesamlphp/metadata/active.php /opt/filesender/simplesamlphp/metadata/active.php
  
 RUN apt-get update && \
     apt-get dist-upgrade -y && \
-    apt-get install -y --no-install-recommends nginx runit && \
+    apt-get install -y --no-install-recommends nginx runit netcat-traditional msmtp-mta && \
     apt-get autoremove -y && \
     apt-get clean && \ 
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -55,7 +59,7 @@ COPY assets /
     
 VOLUME ["/opt/filesender"]
 VOLUME ["/config/fpm", "/config/filesender", "/config/simplesamlphp/config", "/config/simplesamlphp/metadata"]
-VOLUME ["/data/files", "/data/tmp", "/data/log"]
+VOLUME ["/data"]
 
 EXPOSE 80 443 9000
 
