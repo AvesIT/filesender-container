@@ -47,7 +47,7 @@ RUN mkdir -p /config/fpm /config/filesender /config/simplesamlphp/config /config
     ln -s /data/log /opt/filesender/filesender/log && \
     chown -R www-data:www-data /data/tmp /data/log /data/files && \
     ln -s /config/simplesamlphp/metadata/active.php /opt/filesender/simplesamlphp/metadata/active.php && \
-    cp /opt/filesender/filesender/scripts/simplesamlphp/passwordverify/PasswordVerify.php opt/filesender/simplesamlphp/modules/sqlauth/lib/Auth/Source/ && \
+    cp /opt/filesender/filesender/scripts/simplesamlphp/passwordverify/PasswordVerify.php /opt/filesender/simplesamlphp/modules/sqlauth/lib/Auth/Source/ && \
     cd /opt/filesender/simplesamlphp && patch -p1 < /opt/filesender/filesender/scripts/simplesamlphp/passwordverify/patch-to-simplesamlphp.patch && cd - 
 
 RUN apt-get update && \
