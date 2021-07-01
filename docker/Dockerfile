@@ -1,9 +1,9 @@
 FROM php:7.4-fpm-buster
 
-ENV FILESENDER_VERSION=2.24 \
+ENV FILESENDER_VERSION=2.27 \
     FILESENDER_SUM="ef6da83e7ac46303e5f8d620f6858565fd746d7c4b054a12439a561d79b515a2" \
-    SSP_VERSION=1.19.0 \
-    SSP_SUM="2111129787a4baf27a51e52bda660c56d069f167354800bffc72440dcacb3a6f"
+    SSP_VERSION=1.19.1 \
+    SSP_SUM="19e3860eff63f2367579b9ee5c2b7b609d7d17daacacd3e04823ddf599124747"
 
 # Install needed extensions
 COPY --from=mlocati/php-extension-installer:1.2.23 /usr/bin/install-php-extensions /usr/local/bin/
