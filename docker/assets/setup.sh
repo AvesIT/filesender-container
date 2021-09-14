@@ -172,12 +172,12 @@ if [ "`which nc`" != "" ]; then
     RESULT=`nc -z -w1 ${DB_HOST} ${DB_PORT} && echo 1 || echo 0`
   done
 
-  php /opt/filesender/scripts/upgrade/database.php
+  php ${FILESENDER_DIR}/scripts/upgrade/database.php
 
   if [ "xx$SELENIUM_HOST" != "xx" ]; then
     export PGPASSWORD=$DB_PASSWORD
     psql -c 'create database filesenderdataset;' -h $DB_HOST -U $DB_USER
-    bzcat /opt/filesender/scripts/dataset/dumps/filesender-2.0beta1.pg.bz2 | psql -h $DB_HOST -U $DB_USER -d filesenderdataset
+    bzcat ${FILESENDER_DIR}/scripts/dataset/dumps/filesender-2.0beta1.pg.bz2 | psql -h $DB_HOST -U $DB_USER -d filesenderdataset
   fi
 fi
 
